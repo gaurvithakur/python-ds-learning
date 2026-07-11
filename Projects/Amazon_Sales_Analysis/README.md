@@ -1,95 +1,227 @@
-# 📊 Amazon Sales Analysis Dashboard
+# 📊 Amazon Sales Analysis
 
-An interactive, portfolio-level analytics dashboard built with **Streamlit** and
-**Plotly**, analyzing an Amazon India order-level sales export. Built as a
-B.Tech Data Science project — covers data cleaning, EDA, KPIs, and business
-insights across a dedicated multi-page layout.
+An end-to-end **Data Science** project that analyzes Amazon sales data using **Python** to uncover valuable business insights. This project covers the complete data analysis workflow, including data cleaning, preprocessing, exploratory data analysis (EDA), visualization, and an interactive **Streamlit dashboard**.
 
-## ✨ Features
+---
 
-- **Home** — project overview and dataset summary
-- **Dataset Overview** — shape, dtypes, missing values, summary statistics, adjustable preview
-- **Data Cleaning** — before/after comparison of every cleaning step (duplicates, missing values, date parsing, feature engineering)
-- **KPI Dashboard** — 12 metric cards with hover effects (revenue, orders, cancellation rate, B2B/B2C split, etc.)
-- **Sales Analysis** — monthly/daily/weekday trends
-- **Product Analysis** — category & size performance, treemap, outlier detection (IQR + box plots)
-- **Order Analysis** — status, fulfilment, courier, ship-service-level breakdowns
-- **National Sales Analysis** — India choropleth map (with state-name matching against a GeoJSON) + top states/cities bar charts
-- **Customer Analysis** — B2B vs B2C revenue and quantity split
-- **Conclusion & Recommendations** — auto-generated summary of key findings
+## 📖 Project Overview
 
-Every page responds live to a shared set of sidebar filters: Year, Month,
-Category, Size, State, City, Status, Fulfilment, Courier Status, and B2B/B2C.
+The objective of this project is to transform raw Amazon sales data into meaningful business insights using Python. Through Exploratory Data Analysis (EDA), the project identifies sales trends, customer purchasing behavior, product performance, and regional sales distribution to support data-driven decision-making.
+
+---
+
+## 🎯 Objectives
+
+- Clean and preprocess raw sales data.
+- Perform Exploratory Data Analysis (EDA).
+- Analyze sales trends over time.
+- Identify top-performing product categories.
+- Analyze state-wise and city-wise sales.
+- Compare B2B and B2C orders.
+- Build an interactive dashboard using Streamlit.
+
+---
+
+## 📂 Dataset
+
+**Dataset Name:** `Amazon_Sale_Report.csv`
+
+### Dataset Summary
+
+- **Total Records:** 128,976
+- **Total Features:** 21
+
+### Key Features
+
+- Order ID
+- Date
+- Status
+- Category
+- Size
+- Quantity (Qty)
+- Amount
+- State
+- City
+- Fulfilment
+- Sales Channel
+- B2B
+
+---
+
+## 🛠️ Technologies Used
+
+### Programming Language
+
+- Python
+
+### Python Libraries
+
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Plotly
+- Streamlit
+
+### Development Tools
+
+- Jupyter Notebook
+- VS Code
+- Git
+- GitHub
+
+---
+
+## 📈 Project Workflow
+
+```text
+Data Collection
+      │
+      ▼
+Data Cleaning
+      │
+      ▼
+Data Preprocessing
+      │
+      ▼
+Exploratory Data Analysis (EDA)
+      │
+      ▼
+Data Visualization
+      │
+      ▼
+Business Insights
+      │
+      ▼
+Interactive Streamlit Dashboard
+```
+
+---
+
+## 📊 Analysis Performed
+
+- Sales Trend Analysis
+- Category-wise Sales Analysis
+- Monthly Sales Analysis
+- Order Status Distribution
+- Product Size Analysis
+- Revenue Distribution
+- State-wise Sales Analysis
+- City-wise Order Analysis
+- B2B vs B2C Analysis
+- Outlier Detection using Box Plot
+
+---
+
+## 💡 Key Business Insights
+
+- Identified the highest-selling product categories.
+- Discovered the top-performing states and cities.
+- Analyzed monthly sales trends.
+- Compared B2B and B2C purchasing behavior.
+- Examined order status distribution.
+- Generated actionable insights to support business decision-making.
+
+---
+
+## 🌐 Streamlit Dashboard
+
+The project includes an interactive dashboard that allows users to explore:
+
+- 📈 Sales KPIs
+- 📊 Category Performance
+- 📅 Monthly Sales Trends
+- 📍 State-wise Sales Analysis
+- 🏙️ City-wise Order Analysis
+- 📦 Order Status Distribution
+- 📉 Interactive Charts
+
+---
 
 ## 📁 Project Structure
 
-```
-amazon-sales-dashboard/
-├── app.py                  # Main Streamlit app — pages & UI
-├── utils.py                # Data loading, cleaning, feature engineering, KPI helpers
-├── requirements.txt        # Python dependencies
-├── README.md                # This file
-├── .streamlit/
-│   └── config.toml          # Blue & white theme
-└── Amazon_Sale_Report.csv   # ← add your dataset here (not included)
-```
-
-## 🚀 Setup
-
-1. **Clone / download this folder.**
-
-2. **Install dependencies** (a virtual environment is recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-
-3. **Add the dataset.** Place `Amazon_Sale_Report.csv` in the same folder as
-   `app.py`. Expected columns include: `Order ID`, `Date`, `Status`,
-   `Fulfilment`, `ship-service-level`, `Category`, `Size`, `Courier Status`,
-   `Qty`, `currency`, `Amount`, `ship-city`, `ship-state`, `ship-postal-code`,
-   `ship-country`, `B2B`. The app degrades gracefully if some optional
-   columns are missing.
-
-4. **Run the app:**
-   ```bash
-   streamlit run app.py
-   ```
-
-5. Open the URL Streamlit prints (usually `http://localhost:8501`).
-
-## 🗺️ Notes on the India choropleth
-
-The "National Sales Analysis" page fetches a public India state-boundary
-GeoJSON at runtime (requires internet access) and matches your raw
-`ship-state` values against it — including common abbreviations and
-alternate spellings (e.g. `PB` → Punjab, `ORISSA` → Odisha). If the fetch
-fails (e.g. no internet), the page automatically falls back to horizontal
-bar charts for state-wise revenue and orders, so nothing breaks.
-
-## ✏️ Personalizing for your submission
-
-Open `app.py` and edit the constants near the top:
-
-```python
-STUDENT_NAME = "Your Name"
-COLLEGE_NAME = "Your College Name"
-BRANCH_NAME = "B.Tech — Data Science"
+```text
+Amazon_Sales_Analysis/
+│
+├── presentation/
+│   └── Amazon_Sales_Analysis_Presentation.pptx
+│
+├── Amazon_Sale_Report.csv
+├── Amazon_Sales_Analysis.ipynb
+├── app.py
+├── utils.py
+├── config.toml
+├── requirements.txt
+└── README.md
 ```
 
-## 🛠️ Built With
+---
 
-- [Streamlit](https://streamlit.io) — app framework
-- [Pandas](https://pandas.pydata.org) — data cleaning & aggregation
-- [Plotly](https://plotly.com/python/) — all interactive charts
-- [Requests](https://requests.readthedocs.io) — GeoJSON fetch for the choropleth
+## 🚀 Installation
 
+### 1. Clone the repository
 
+```bash
+git clone https://github.com/gaurvithakur/python-ds-learning.git
+```
 
-## Project Presentation
+### 2. Navigate to the project directory
 
-The complete project presentation is available in the `presentation/` folder.
+```bash
+cd python-ds-learning/Projects/Amazon_Sales_Analysis
+```
 
-- Amazon_Sales_Analysis_Presentation.pptx
-- Amazon_Sales_Analysis_Presentation.pdf
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the Streamlit application
+
+```bash
+streamlit run app.py
+```
+
+---
+
+## 📚 Skills Demonstrated
+
+- Python Programming
+- Data Cleaning
+- Data Preprocessing
+- Exploratory Data Analysis (EDA)
+- Data Visualization
+- Business Analytics
+- Dashboard Development
+- Git & GitHub Version Control
+
+---
+
+## 🚀 Future Scope
+
+- Sales Forecasting using Machine Learning
+- Customer Segmentation
+- Product Recommendation System
+- Power BI Dashboard
+- Real-time Data Integration
+
+---
+
+## 👩‍💻 Author
+
+**Gaurvi Thakur**
+
+🎓 B.Tech – Computer Science Engineering (AI & ML)
+
+💡 Aspiring AI Engineer | Data Science Enthusiast
+
+GitHub: https://github.com/gaurvithakur
+
+---
+
+## ⭐ Acknowledgements
+
+This project was developed as part of my Data Science learning journey to strengthen my skills in Python, data analysis, visualization, and dashboard development.
+
+If you found this project useful, consider giving this repository a ⭐ on GitHub.
