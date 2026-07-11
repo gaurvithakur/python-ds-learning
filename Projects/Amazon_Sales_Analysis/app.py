@@ -40,6 +40,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+
+
+
+
 DARK_BG = "#0F1420"
 CARD_BG = "#161D2C"
 BORDER = "#2A3348"
@@ -307,48 +311,203 @@ if fdf.empty:
 kpis = compute_kpis(fdf)
 
 
+
+
 # ==========================================================================
-# PAGE: HOME
+# PAGE : HOME
 # ==========================================================================
 if page == "🏠 Home":
+
+    # ================= HERO SECTION =================
     st.markdown(
         f"""
-        <div class="hero">
-            <h1>📊 Amazon Sales Analysis Dashboard</h1>
-            <p>An end-to-end analytics dashboard covering data cleaning, EDA,
-            KPIs, and business insights from a real Amazon India sales export.</p>
-            <p style="margin-top:14px;"><b>{STUDENT_NAME}</b> · {BRANCH_NAME} · {COLLEGE_NAME}</p>
+        <div style="
+            background:linear-gradient(135deg,#232F3E,#131A22);
+            padding:35px;
+            border-radius:18px;
+            border-left:8px solid #FF9900;
+            margin-bottom:25px;
+        ">
+        <div style="display:flex;align-items:center;gap:25px;">
+
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+        width="140">
+
+        <div>
+
+        <h1 style="color:white;margin-bottom:5px;">
+        Amazon Sales Analysis Dashboard
+        </h1>
+
+        <h3 style="color:#FF9900;margin-top:0;">
+        Interactive Business Intelligence Dashboard
+        </h3>
+
+        <p style="color:#DDDDDD;font-size:18px;">
+        Analyze Amazon India sales data using Python, Pandas,
+        Plotly and Streamlit.
+        </p>
+
+        <p style="color:white;">
+        <b>{STUDENT_NAME}</b><br>
+        {BRANCH_NAME}<br>
+        {COLLEGE_NAME}
+        </p>
+
+        </div>
+
+        </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
+    # ==========================================================
+    # BUSINESS KPI CARDS
+    # ==========================================================
+
+    kpis = compute_kpis(df)
+
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("📄 Total Rows (raw)", f"{cleaning_report['raw_shape'][0]:,}")
-    c2.metric("📊 Total Columns (raw)", cleaning_report["raw_shape"][1])
-    c3.metric("✅ Rows After Cleaning", f"{cleaning_report['clean_shape'][0]:,}")
-    c4.metric("🔁 Duplicates Removed", f"{cleaning_report['duplicates_removed']:,}")
-    st.caption("📁 Data source: **Amazon Sale Report.csv**")
 
-    st.markdown("### 📖 Project Overview")
-    st.write(
-        "This dashboard analyzes Amazon India order-level sales data to surface "
-        "revenue trends, product and category performance, fulfilment and courier "
-        "reliability, and state/city-level demand. The pipeline covers missing-value "
-        "treatment, duplicate removal, date parsing, feature engineering (Year, Month, "
-        "Weekday), outlier detection (IQR), an India choropleth for geographic sales, and an "
-        "**Advanced Analytics** page with heatmaps, an interactive scatter plot, and a "
-        "distribution explorer (box plots)."
+    c1.metric("💰 Total Revenue", fmt_inr(kpis["total_revenue"]))
+    c2.metric("📦 Total Orders", f"{kpis['total_orders']:,}")
+    c3.metric("🛒 Quantity Sold", f"{kpis['total_qty']:,}")
+    c4.metric("💳 Avg Order Value", fmt_inr(kpis["avg_order_value"]))
+
+    insight(
+        f"Across the full dataset, cancellation rate stands at **{fmt_pct(kpis['cancellation_rate'])}** "
+        f"and return rate at **{fmt_pct(kpis['return_rate'])}** — see the Order Analysis page to dig into "
+        "the drivers behind these before they eat into the revenue shown above."
     )
 
-    st.markdown("### 🧭 How to use this dashboard")
-    st.write(
-        "Use the sidebar to navigate between pages and apply filters (Year, Month, "
-        "Category, Size, State, City, Status, Fulfilment, Courier Status, B2B/B2C). "
-        "Every chart across every page updates live based on your filter selection."
-    )
+    st.divider()
+
+    # ==========================================================
+    # QUICK INSIGHTS
+    # ==========================================================
+
+    st.subheader("📌 Quick Insights")
+
+    a, b, c, d = st.columns(4)
+
+    a.info(f"""
+### 🏆 Top Category
+
+**{df.groupby("Category")["Amount"].sum().idxmax()}**
+""")
+
+    b.info(f"""
+### 🌍 Top State
+
+**{df.groupby("ship-state")["Amount"].sum().idxmax()}**
+""")
+
+    c.info(f"""
+### 🏙️ Top City
+
+**{df.groupby("ship-city")["Amount"].sum().idxmax()}**
+""")
+
+    d.info(f"""
+### 📦 Most Common Status
+
+**{df['Status'].mode()[0]}**
+""")
+
+    st.divider()
+
+    # ==========================================================
+    # INTERACTIVE CHARTS
+    # ==========================================================
+
+    left, right = st.columns(2)
+
+    with left:
+
+        monthly = (
+            df.groupby("Month", observed=False)["Amount"]
+            .sum()
+            .reset_index()
+        )
+
+        fig = px.line(
+            monthly,
+            x="Month",
+            y="Amount",
+            markers=True,
+            title="Monthly Revenue Trend"
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+    with right:
+
+        cat = (
+            df.groupby("Category")["Amount"]
+            .sum()
+            .sort_values(ascending=False)
+            .head(5)
+            .reset_index()
+        )
+
+        fig = px.bar(
+            cat,
+            x="Category",
+            y="Amount",
+            color="Amount",
+            title="Top 5 Categories"
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.divider()
+
+    # ==========================================================
+    # PROJECT SUMMARY
+    # ==========================================================
+
+    st.subheader("📖 Project Summary")
+
+    st.info("""
+This dashboard provides an end-to-end analysis of Amazon India sales data.
+
+It helps understand:
+
+• Revenue trends
+
+• Product performance
+
+• Customer behaviour
+
+• State-wise sales
+
+• Order fulfilment
+
+• Business insights
+
+All charts respond instantly to the filters available in the sidebar.
+""")
+
+    st.divider()
+
+    # ==========================================================
+    # TECHNOLOGY STACK
+    # ==========================================================
+
+    st.subheader("🛠️ Technology Stack")
+
+    t1, t2, t3, t4 = st.columns(4)
+
+    t1.success("🐍 Python")
+    t2.success("🐼 Pandas")
+    t3.success("📊 Plotly")
+    t4.success("🌐 Streamlit")
+
+    st.caption("💡 Tip: Use the sidebar filters to explore different business insights.")
 
 
+    
 # ==========================================================================
 # PAGE: DATASET OVERVIEW
 # ==========================================================================
@@ -376,10 +535,16 @@ elif page == "🔍 Dataset Overview":
         else:
             st.dataframe(miss.rename("Missing Count"), use_container_width=True)
 
-    with st.expander("📈 Summary statistics"):
-        st.dataframe(df.describe(include="all").T, use_container_width=True)
+    with st.expander("📈 Summary Statistics"):
+        st.dataframe(df.select_dtypes(include="number").describe().T.round(2), use_container_width=True)
 
-
+    total_missing = int(df.isna().sum().sum())
+    dup_pct = cleaning_report["duplicates_removed"] / max(cleaning_report["raw_shape"][0], 1) * 100
+    if total_missing == 0:
+        insight(f"The cleaned dataset has **no missing values** across all {df.shape[1]} columns — ready for analysis with no further imputation needed.")
+    else:
+        insight(f"**{total_missing:,}** missing values remain in the cleaned dataset — check the expander above before relying on affected columns.")
+    insight(f"**{cleaning_report['duplicates_removed']:,}** duplicate rows ({dup_pct:.1f}% of the raw file) were removed, meaning revenue figures aren't being double-counted.")
 # ==========================================================================
 # PAGE: DATA CLEANING
 # ==========================================================================
@@ -438,6 +603,14 @@ elif page == "🧹 Data Cleaning":
     )
     fig.update_xaxes(title="Column")
     st.plotly_chart(fig, use_container_width=True)
+
+    rows_dropped = cleaning_report["raw_shape"][0] - cleaning_report["clean_shape"][0]
+    rows_dropped_pct = rows_dropped / max(cleaning_report["raw_shape"][0], 1) * 100
+    insight(
+        f"Cleaning removed **{rows_dropped:,} rows** in total ({rows_dropped_pct:.1f}% of the raw file) — "
+        "mostly cancelled orders with no completed transaction value, so the revenue KPIs elsewhere in "
+        "this dashboard reflect genuine sales rather than inflated raw-file counts."
+    )
 
 
 # ==========================================================================
@@ -635,10 +808,16 @@ elif page == "📊 Advanced Analytics":
     with sc3:
         color_by = st.selectbox("Color by", color_options, index=0, key="scatter_color")
     with sc4:
-        sample_n = st.slider(
-            "Points to plot", min_value=200, max_value=min(10000, len(fdf)),
-            value=min(2000, len(fdf)), step=200, key="scatter_sample",
-        )
+        max_sample = min(10000, len(fdf))
+        if max_sample <= 200:
+            # Filtered selection is too small for a meaningful slider — just plot everything.
+            sample_n = max_sample
+            st.caption(f"Plotting all {sample_n:,} points (fewer than 200 rows in the current selection).")
+        else:
+            sample_n = st.slider(
+                "Points to plot", min_value=200, max_value=max_sample,
+                value=min(2000, max_sample), step=200, key="scatter_sample",
+            )
 
     scatter_df = fdf.sample(n=sample_n, random_state=42) if len(fdf) > sample_n else fdf
     fig = px.scatter(
