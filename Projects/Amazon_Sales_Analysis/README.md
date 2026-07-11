@@ -84,3 +84,12 @@ BRANCH_NAME = "B.Tech — Data Science"
 - [Pandas](https://pandas.pydata.org) — data cleaning & aggregation
 - [Plotly](https://plotly.com/python/) — all interactive charts
 - [Requests](https://requests.readthedocs.io) — GeoJSON fetch for the choropleth
+
+
+
+## Project Presentation
+
+The complete project presentation is available in the `presentation/` folder.
+
+- Amazon_Sales_Analysis_Presentation.pptx
+- Amazon_Sales_Analysis_Presentation.pdf
